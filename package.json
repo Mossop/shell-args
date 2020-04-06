@@ -1,0 +1,44 @@
+{
+  "name": "shell-args",
+  "version": "1.0.0",
+  "description": "Parsing and quoting for shell command lines that supports both bash and windows styles of quoting.",
+  "main": "bin/index.js",
+  "types": "bin/index.d.ts",
+  "typings": "bin/index.d.ts",
+  "scripts": {
+    "test": "mocha test",
+    "compile": "tsc",
+    "watch": "tsc -watch",
+    "lint": "eslint --ext .ts,.js ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mossop/shell-args.git"
+  },
+  "keywords": [
+    "shell",
+    "arguments",
+    "quoting",
+    "parsing"
+  ],
+  "author": "Dave Townsend <dtownsend@oxymoronical.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mossop/shell-args/issues"
+  },
+  "homepage": "https://github.com/Mossop/shell-args#readme",
+  "devDependencies": {
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.0",
+    "@types/vscode": "^1.43.0",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0",
+    "eslint-import-resolver-ts": "^0.4.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-mossop": "github:Mossop/eslint-plugin-mossop#1.0.4",
+    "expect": "^25.2.7",
+    "mocha": "^7.1.1",
+    "typescript": "^3.8.3"
+  }
+}
