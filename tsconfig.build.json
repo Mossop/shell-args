@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
-    "noEmit": true,
+    "outDir": "bin",
     "lib": [
       "es6"
     ],
@@ -13,6 +13,9 @@
     "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
     "noUnusedParameters": true  /* Report errors on unused parameters. */
   },
+  "include": [
+    "src/**.ts",
+  ],
   "exclude": [
     "bin",
     "node_modules",

@@ -6,8 +6,8 @@
   "types": "bin/index.d.ts",
   "typings": "bin/index.d.ts",
   "scripts": {
-    "test": "mocha test",
-    "compile": "tsc",
+    "test": "jest",
+    "compile": "tsc --project tsconfig.build.json",
     "watch": "tsc -watch",
     "lint": "eslint --ext .ts,.js ."
   },
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Mossop/shell-args#readme",
   "devDependencies": {
-    "@types/mocha": "^7.0.2",
+    "@types/jest": "^25.2.1",
     "@types/node": "^13.11.0",
     "@types/vscode": "^1.43.0",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
@@ -36,9 +36,9 @@
     "eslint": "^6.8.0",
     "eslint-import-resolver-ts": "^0.4.2",
     "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-mossop": "github:Mossop/eslint-plugin-mossop#1.0.4",
-    "expect": "^25.2.7",
-    "mocha": "^7.1.1",
+    "eslint-plugin-mossop": "github:Mossop/eslint-plugin-mossop#1.0.6",
+    "jest": "^25.2.7",
+    "ts-jest": "^25.3.1",
     "typescript": "^3.8.3"
   }
 }

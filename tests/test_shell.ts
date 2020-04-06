@@ -2,13 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-const expect = require("expect");
+import { bashShellQuote, winShellQuote, bashShellParse, winShellParse } from "../src/shell";
 
-const { bashShellQuote, winShellQuote, bashShellParse, winShellParse } = require("..");
-
-describe("bash", () => {
-  describe("shellParse", () => {
-    it("parses basic command lines.", () => {
+describe("bash", (): void => {
+  describe("shellParse", (): void => {
+    it("parses basic command lines.", (): void => {
       expect(bashShellParse("")).toStrictEqual([]);
       expect(bashShellParse("   \t  ")).toStrictEqual([]);
       expect(bashShellParse("hello there world")).toStrictEqual(["hello", "there", "world"]);
@@ -16,7 +14,7 @@ describe("bash", () => {
         .toStrictEqual(["/foo/bar", "/bar/baz", "/biz"]);
     });
 
-    it("handles double quotes.", () => {
+    it("handles double quotes.", (): void => {
       expect(bashShellParse("\"basic arg\" \"and another\""))
         .toStrictEqual(["basic arg", "and another"]);
       expect(bashShellParse("\"weird \"arg an\"d a\"nother an\"d again\""))
@@ -25,7 +23,7 @@ describe("bash", () => {
         .toStrictEqual(["can \" embed quotes ' like this"]);
     });
 
-    it("handles single quotes.", () => {
+    it("handles single quotes.", (): void => {
       expect(bashShellParse("'basic arg' 'and another'"))
         .toStrictEqual(["basic arg", "and another"]);
       expect(bashShellParse("'weird 'arg an'd a'nother an'd again'"))
@@ -36,7 +34,7 @@ describe("bash", () => {
         .toStrictEqual(["cannot embed \\single", "quotes"]);
     });
 
-    it("handles continuations", () => {
+    it("handles continuations", (): void => {
       expect(bashShellParse("a long \\\n command line"))
         .toStrictEqual(["a", "long", "command", "line"]);
       expect(bashShellParse("a long\\\ncommand line")).toStrictEqual(["a", "longcommand", "line"]);
@@ -46,61 +44,61 @@ describe("bash", () => {
         .toStrictEqual(["not", "in\\\nsingle quotes"]);
     });
 
-    it("handles braces", () => {
+    it("handles braces", (): void => {
       expect(bashShellParse("foo test\\(\\)")).toStrictEqual(["foo", "test()"]);
       expect(bashShellParse("foo 'test()'")).toStrictEqual(["foo", "test()"]);
       expect(bashShellParse("foo \"test()\"")).toStrictEqual(["foo", "test()"]);
     });
   });
 
-  describe("shellQuote", () => {
-    let check = (args, expected) => {
+  describe("shellQuote", (): void => {
+    let check = (args: string[], expected: string): void => {
       let result = bashShellQuote(args);
       expect(result).toStrictEqual(expected);
       expect(bashShellParse(result)).toStrictEqual(args);
     };
 
-    it("quotes basic arguments", () => {
+    it("quotes basic arguments", (): void => {
       check(["foo", "bar", "baz"], "foo bar baz");
       check(["/foofoo", "/bar", "baz"], "/foofoo /bar baz");
     });
 
-    it("quotes spaced arguments", () => {
+    it("quotes spaced arguments", (): void => {
       check(["foo", "bar biz", "baz"], "foo 'bar biz' baz");
       check(["foo", " bar biz", "baz"], "foo ' bar biz' baz");
       check(["foo", "bar biz ", "baz"], "foo 'bar biz ' baz");
     });
 
-    it("quotes double quotes", () => {
+    it("quotes double quotes", (): void => {
       check(["double", "\"test\""], "double '\"test\"'");
       check(["double", "t\"e\"st\""], "double 't\"e\"st\"'");
     });
 
-    it("quotes single quotes", () => {
+    it("quotes single quotes", (): void => {
       check(["single", "'test'"], "single \"'test'\"");
       check(["single", "t'e'st'"], "single \"t'e'st'\"");
     });
 
-    it("quotes escapes", () => {
+    it("quotes escapes", (): void => {
       check(["escape", "foo\\ba\\r"], "escape 'foo\\ba\\r'");
     });
 
-    it("handles complex cases", () => {
+    it("handles complex cases", (): void => {
       check(
         ["complex", "foo\"bar'baz bopdiz daz\\oh"],
         "complex \"foo\\\"bar'baz bopdiz daz\\\\oh\"",
       );
     });
 
-    it("quotes braces", () => {
+    it("quotes braces", (): void => {
       check(["test", "foo()"], "test 'foo()'");
     });
   });
 });
 
-describe("windows", () => {
-  describe("shellParse", () => {
-    it("parses basic command lines.", () => {
+describe("windows", (): void => {
+  describe("shellParse", (): void => {
+    it("parses basic command lines.", (): void => {
       expect(winShellParse("")).toStrictEqual([]);
       expect(winShellParse("   \t  ")).toStrictEqual([]);
       expect(winShellParse("hello there world")).toStrictEqual(["hello", "there", "world"]);
@@ -108,7 +106,7 @@ describe("windows", () => {
         .toStrictEqual(["/foo/bar", "/bar/baz", "/biz"]);
     });
 
-    it("handles double quotes.", () => {
+    it("handles double quotes.", (): void => {
       expect(winShellParse("\"basic arg\" \"and another\""))
         .toStrictEqual(["basic arg", "and another"]);
       expect(winShellParse("\"weird \"arg an\"d a\"nother an\"d again\""))
@@ -118,7 +116,7 @@ describe("windows", () => {
       expect(winShellParse("\\\"isn't counted.")).toStrictEqual(["\"isn't", "counted."]);
     });
 
-    it("handles escapes correctly.", () => {
+    it("handles escapes correctly.", (): void => {
       expect(winShellParse("Show\\\\\\\\the result")).toStrictEqual(["Show\\\\\\\\the", "result"]);
       expect(winShellParse("Show\\\\\\the result")).toStrictEqual(["Show\\\\\\the", "result"]);
       expect(winShellParse("Show\\\\\\\"the result")).toStrictEqual(["Show\\\"the", "result"]);
@@ -127,7 +125,7 @@ describe("windows", () => {
         .toStrictEqual(["Show", "\\\\\\\\", "the", "result"]);
     });
 
-    it("matches ms docs", () => {
+    it("matches ms docs", (): void => {
       expect(winShellParse("\"a b c\" d e")).toStrictEqual(["a b c", "d", "e"]);
       expect(winShellParse("\"ab\\\"c\" \"\\\\\" d")).toStrictEqual(["ab\"c", "\\", "d"]);
       expect(winShellParse("a\\\\\\b d\"e f\"g h")).toStrictEqual(["a\\\\\\b", "de fg", "h"]);
@@ -136,25 +134,25 @@ describe("windows", () => {
     });
   });
 
-  describe("shellQuote", () => {
-    let check = (args, expected) => {
+  describe("shellQuote", (): void => {
+    let check = (args: string[], expected: string): void => {
       let result = winShellQuote(args);
       expect(result).toStrictEqual(expected);
       expect(winShellParse(result)).toStrictEqual(args);
     };
 
-    it("quotes basic arguments", () => {
+    it("quotes basic arguments", (): void => {
       check(["foo", "bar", "baz"], "foo bar baz");
       check(["/foofoo", "/bar", "baz"], "/foofoo /bar baz");
     });
 
-    it("quotes spaced arguments", () => {
+    it("quotes spaced arguments", (): void => {
       check(["foo", "bar biz", "baz"], "foo \"bar biz\" baz");
       check(["foo", " bar biz", "baz"], "foo \" bar biz\" baz");
       check(["foo", "bar biz ", "baz"], "foo \"bar biz \" baz");
     });
 
-    it("quotes double quotes", () => {
+    it("quotes double quotes", (): void => {
       check(["double", "\"test\""], "double \\\"test\\\"");
       check(["double", "t\"e\"st\""], "double t\\\"e\\\"st\\\"");
       check(["double", "foo\""], "double foo\\\"");
@@ -162,16 +160,16 @@ describe("windows", () => {
       check(["double", "foo\\ \\\""], "double \"foo\\ \\\\\\\"\"");
     });
 
-    it("ignores single quotes", () => {
+    it("ignores single quotes", (): void => {
       check(["single", "'test'"], "single 'test'");
       check(["single", "t'e'st'"], "single t'e'st'");
     });
 
-    it("quotes escapes", () => {
+    it("quotes escapes", (): void => {
       check(["escape", "foo\\ba\\r"], "escape foo\\ba\\r");
     });
 
-    it("handles complex cases", () => {
+    it("handles complex cases", (): void => {
       check(["complex", "foo \"test\" bar\\\\baz"], "complex \"foo \\\"test\\\" bar\\\\baz\"");
     });
   });
